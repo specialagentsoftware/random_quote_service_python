@@ -1,12 +1,13 @@
 from flask import Flask
-from file_client import file_client
+from quote_client import quote_client
 
 app = Flask(__name__)
 
 @app.route("/")
-def hello_world():
-    fc = file_client
-    return "<p>Hello, World!</p>"
+def quotes():
+    qc = quote_client.quote_client()
+    quote = qc.randomquote()
+    return quote
 
 if __name__ == "__main__":
     app.run()
