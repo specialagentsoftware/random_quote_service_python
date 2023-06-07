@@ -5,12 +5,17 @@ import random
 
 
 class quote_client:
+    """quote client handles opening the csv file, parsing it,
+    creating quote objects, creating a list of quotes and allowing
+    the return of a random quote from the list"""
+
     config = configparser.ConfigParser()
     quotelist = []
     config.read("config/config.ini")
     quote_file_path = config["DEFAULT"]["CsvFilePath"]
 
     def __init__(self) -> str:
+        """the quote client constructor opens the csv file, parses it, and creates a list of quote objects"""
         try:
             with open(self.quote_file_path, newline="\n") as f:
                 reader = csv.reader(f)
@@ -30,6 +35,9 @@ class quote_client:
             )
 
     def randomquote(self):
+        """the randomquote function selects a random quote from the quote list and
+        returns a formatted string related to the selected random quote"""
+
         selectedquote = self.quotelist[random.randint(0, len(self.quotelist))]
         author = selectedquote.get_author()
         quote = selectedquote.get_quote()
