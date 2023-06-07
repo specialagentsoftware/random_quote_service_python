@@ -1,27 +1,36 @@
-import os,csv,sys
+import os, csv, sys
 from quote import quote
 import configparser
 import random
 
+
 class quote_client:
-    
     config = configparser.ConfigParser()
     quotelist = []
-    config.read('config/config.ini')
-    quote_file_path = config['DEFAULT']['CsvFilePath']
-    
+    config.read("config/config.ini")
+    quote_file_path = config["DEFAULT"]["CsvFilePath"]
+
     def __init__(self) -> str:
-        with open(self.quote_file_path, newline='\n') as f:
-            reader = csv.reader(f)
-            try:
-                for row in reader:
-                    q = quote.quote(row[0],row[1],row[2])
-                    self.quotelist.append(q)
-            except csv.Error as e:
-                sys.exit('file {}, line {}: {}'.format(self.quote_file_path, reader.line_num, e))    
+        try:
+            with open(self.quote_file_path, newline="\n") as f:
+                reader = csv.reader(f)
+                try:
+                    for row in reader:
+                        q = quote.quote(row[0], row[1], row[2])
+                        self.quotelist.append(q)
+                except csv.Error as e:
+                    sys.exit(
+                        "file {}, line {}: {}".format(
+                            self.quote_file_path, reader.line_num, e
+                        )
+                    )
+        except IOError as e:
+            sys.exit(
+                "The following error occurred when trying to open the file {}".format(e)
+            )
 
     def randomquote(self):
-        selectedquote = self.quotelist[random.randint(0,48390)]
+        selectedquote = self.quotelist[random.randint(0, len(self.quotelist))]
         author = selectedquote.get_author()
         quote = selectedquote.get_quote()
         category = selectedquote.get_category()
